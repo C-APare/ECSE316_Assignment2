@@ -67,6 +67,18 @@ class Definitions:
             return out
 
     @staticmethod
+    def naive_dft_2d(image: np.ndarray) -> np.ndarray:
+        im = np.asarray(image, dtype=complex)
+        size1d, size2d = im.shape
+        out = np.zeros((size1d, size2d), dtype=complex) 
+        for i in range(size1d):
+            for j in range(size2d):
+                for m in range(size2d):
+                    for n in range(size1d):
+                        out[i,j] += im[n, m] * np.exp(-2j * np.pi * ((j * m / size2d) + (i * n /size1d)))
+        return out
+
+    @staticmethod
     def fft_dft_2d(image: np.ndarray) -> np.ndarray:
         im = np.asarray(image, dtype=complex)
         size1d, size2d = im.shape
