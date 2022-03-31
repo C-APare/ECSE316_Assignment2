@@ -19,6 +19,7 @@ class Definitions:
     def fft_dft_1d(image: np.ndarray) -> np.ndarray:
         im = np.asarray(image, dtype=complex)
         size = im.shape[0]
+        print(size)
         if (size % 2 != 0):
             raise AssertionError("Error\tSize must be a power of 2")
         elif size <= 16:
@@ -30,7 +31,8 @@ class Definitions:
 
             for n in range (size):
                 out[n] = even[n % (size//2)] + np.exp(-2j * np.pi * n / size) * odd[n % (size//2)]
-
+            
+            
             return out
 
     @staticmethod
@@ -83,13 +85,10 @@ class Definitions:
         im = np.asarray(image, dtype=complex)
         size1d, size2d = im.shape
         out = np.zeros((size1d, size2d), dtype=complex) 
-
         for col in range(size2d):
             out[:, col] = Definitions.fft_dft_1d(im[:, col])
-
         for row in range(size1d):
             out[row, :] = Definitions.fft_dft_1d(im[row, :])
-
         return out
 
     @staticmethod
@@ -100,8 +99,37 @@ class Definitions:
 
         for row in range(size1d):
             out[row, :] = Definitions.fft_dft_1d_inverse(im[row, :])
+            
 
         for col in range(size2d):
             out[:, col] = Definitions.fft_dft_1d_inverse(im[:, col])
 
         return out
+
+    @staticmethod
+    def test():
+        # one dimension
+        a = np.random.random(1024)
+        fft = np.fft.fft(a)
+
+        # two dimensions
+        a2 = np.random.rand(32, 32)
+        fft2 = np.fft.fft2(a2)
+
+        tests = (
+            (Definitions.naive_dft_1d, a, fft),
+            (Definitions.naive_dft_1d_inverse, fft, a),
+            (Definitions.fft_dft_1d, a, fft),
+            (Definitions.fft_dft_1d_inverse, fft, a),
+            (Definitions.naive_dft_2d, a2, fft2),
+            (Definitions.fft_dft_2d, a2, fft2),
+            (Definitions.fft_dft_2d_inverse, fft2, a2)
+        )
+
+        for method, args, expected in tests:
+            if not np.allclose(method(args), expected):
+                print(args)
+                print(method(args))
+                print(expected)
+                raise AssertionError(
+                    "{} failed the test".format(method.__name__))

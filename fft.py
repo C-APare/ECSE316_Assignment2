@@ -11,11 +11,10 @@ from dft_def import Definitions
 
 def main():
     try:
-        args = parse_args()
-    except BaseException:
+        args = parser()
+    except Exception:
         print("ERROR\tIncorrect input syntax: Check arguments")
         return
-
     mode = args.mode
     image = args.image
 
@@ -41,10 +40,10 @@ def first_mode(image: str) -> None:
     new_shape  = get_new_shape(actual_shape[0]), get_new_shape(actual_shape[1])
     new_image = np.zeros(new_shape)
     new_image[:actual_shape[0], :actual_shape[1]] = actual_image
-
+    
     #Do 2d fft
     fft_2d = Definitions.fft_dft_2d(new_image)
-
+    
     #Display plots
     fig, ax = plt.subplots(1, 2)
     ax[0].imshow(new_image[:actual_shape[0], :actual_shape[1]], plt.cm.gray)
@@ -69,7 +68,7 @@ def second_mode(image: str) -> None:
     fft_2d = Definitions.fft_dft_2d(new_image)
     row, column = fft_2d.shape
     fft_2d[int(row * keep_ratio) : int(row*(1-keep_ratio))] = 0
-    fft_2d[:, int(column*keep_ratio):int(column(1-keep_ratio))] = 0
+    fft_2d[:, int(column*keep_ratio) : int(column * (1-keep_ratio))] = 0
 
     # Inverse to denoise image
     fft_2d_inverse = Definitions.fft_dft_2d_inverse(fft_2d).real
@@ -167,12 +166,12 @@ def fourth_mode() -> None:
             plt.errorbar(x, y, yerr=sd, fmt=color)
         plt.show()
 
-def parse_args() -> argparse.Namespace:
+def parser() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument('-m', action='store', dest='mode',
+    parser.add_argument('-m', dest='mode',
                         help='Mode of operation 1-> fast, 2-> denoise, 3-> compressing 4-> plot', type=int, default=1)
-    parser.add_argument('-i', action='store', dest='image',
-                        help='filepath of image to take FFT', type=str, default='moonlanding.png')
+    parser.add_argument('-i', dest='image',
+                        help='filepath of image to take FFT', default='moonlanding.png')
     return parser.parse_args()
 
 if __name__ == "__main__":
