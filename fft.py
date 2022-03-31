@@ -18,6 +18,8 @@ def main():
     mode = args.mode
     image = args.image
 
+    Definitions.test()
+
     if mode == 1:
         first_mode(image)
     elif mode == 2:

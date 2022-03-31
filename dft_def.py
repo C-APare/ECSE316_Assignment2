@@ -19,7 +19,6 @@ class Definitions:
     def fft_dft_1d(image: np.ndarray) -> np.ndarray:
         im = np.asarray(image, dtype=complex)
         size = im.shape[0]
-        print(size)
         if (size % 2 != 0):
             raise AssertionError("Error\tSize must be a power of 2")
         elif size <= 16:
@@ -53,6 +52,7 @@ class Definitions:
     def fft_dft_1d_inverse(image: np.ndarray) -> np.ndarray:
         im = np.asarray(image, dtype=complex)
         size = im.shape[0]
+
         if (size % 2 != 0):
             raise AssertionError("Error\tSize must be a power of 2")
         elif size <= 16:
@@ -62,8 +62,9 @@ class Definitions:
             odd = Definitions.fft_dft_1d_inverse(image[1::2])
             out = np.zeros(size, dtype=complex)
 
+            half_size = size//2
             for n in range (size):
-                out[n] = even[n % (size//2)] + np.exp(2j * np.pi * n / size) * odd[n % (size//2)]
+                out[n] = half_size * even[n % half_size] + np.exp(2j * np.pi * n / size) * half_size * odd[n % half_size]
                 out[n] /= size
 
             return out
@@ -85,10 +86,12 @@ class Definitions:
         im = np.asarray(image, dtype=complex)
         size1d, size2d = im.shape
         out = np.zeros((size1d, size2d), dtype=complex) 
+
         for col in range(size2d):
             out[:, col] = Definitions.fft_dft_1d(im[:, col])
+
         for row in range(size1d):
-            out[row, :] = Definitions.fft_dft_1d(im[row, :])
+            out[row, :] = Definitions.fft_dft_1d(out[row, :])
         return out
 
     @staticmethod
@@ -102,7 +105,7 @@ class Definitions:
             
 
         for col in range(size2d):
-            out[:, col] = Definitions.fft_dft_1d_inverse(im[:, col])
+            out[:, col] = Definitions.fft_dft_1d_inverse(out[:, col])
 
         return out
 
