@@ -57,7 +57,7 @@ def first_mode(image: str) -> None:
 
 def second_mode(image: str) -> None:
     # Define the ratio to keep for the frequencies
-    keep_ratio = 0.9
+    keep_ratio = 0.08
 
     #Get and resize image
     actual_image = plt.imread(image).astype(float)
@@ -97,7 +97,7 @@ def third_mode(image: str) -> None:
     first_count = actual_shape[0] * actual_shape[1]
 
     # Get fft
-    fft = Definitions.fft_dft_1d(new_image)
+    fft = Definitions.fft_dft_2d(new_image)
 
     # Render
     fig, ax = plt.subplots(2, 3)
@@ -139,16 +139,13 @@ def fourth_mode() -> None:
             x = []
             y = []
 
-            problem_size = 2**5
+            problem_size = 2**6
             while problem_size <= 2**10:
-                print(f"doing problem size of {problem_size}")
-                a = np.random.rand(int(math.sqrt(problem_size)),
-                                   int(math.sqrt(problem_size)))
+                a = np.random.rand(int(math.sqrt((problem_size))), int(math.sqrt((problem_size))))
                 x.append(problem_size)
 
                 stats_data = []
                 for i in range(runs):
-                    print(f"run {i+1} ...")
                     start_time = time.time()
                     algo(a)
                     delta = time.time() - start_time

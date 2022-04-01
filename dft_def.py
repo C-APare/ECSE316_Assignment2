@@ -10,8 +10,9 @@ class Definitions:
         out = np.zeros(size, dtype=complex)
 
         for i in range(size):
-            for j in range(size):
-                out[i] += im[j] * np.exp(-2j * np.pi * i * j / size)
+            for k in range(size):
+                temp = im[k] * np.exp(-2j * np.pi * i * k / size)
+                out[i] += temp
 
         return out    
 
@@ -22,10 +23,10 @@ class Definitions:
         if (size % 2 != 0):
             raise AssertionError("Error\tSize must be a power of 2")
         elif size <= 16:
-            return Definitions.naive_dft_1d(image)
+            return Definitions.naive_dft_1d(im)
         else:
-            even = Definitions.fft_dft_1d(image[::2])
-            odd = Definitions.fft_dft_1d(image[1::2])
+            even = Definitions.fft_dft_1d(im[::2])
+            odd = Definitions.fft_dft_1d(im[1::2])
             out = np.zeros(size, dtype=complex)
 
             for n in range (size):
@@ -56,10 +57,10 @@ class Definitions:
         if (size % 2 != 0):
             raise AssertionError("Error\tSize must be a power of 2")
         elif size <= 16:
-            return Definitions.naive_dft_1d_inverse(image)
+            return Definitions.naive_dft_1d_inverse(im)
         else:
-            even = Definitions.fft_dft_1d_inverse(image[::2])
-            odd = Definitions.fft_dft_1d_inverse(image[1::2])
+            even = Definitions.fft_dft_1d_inverse(im[::2])
+            odd = Definitions.fft_dft_1d_inverse(im[1::2])
             out = np.zeros(size, dtype=complex)
 
             half_size = size//2
