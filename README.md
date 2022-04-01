@@ -5,7 +5,8 @@ This is assignment 2 for Winter 2022 ECSE 316
 
 ### arguments
 #### usage
-python fft.py [-h] [-m MODE] [-i IMAGE]
+python3 fft.py [-h] [-m MODE] [-i IMAGE]
+Ex: python3 fft.py -m 3 -i moonlanding.png
 
 #### optional arguments:
 - -h, --help  show this help message and exit
